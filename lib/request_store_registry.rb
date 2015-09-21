@@ -1,7 +1,8 @@
-require "request_store_registry/version"
-require "request_store"
+require 'request_store_registry/version'
+require 'request_store'
+require 'active_support/per_thread_registry'
 
-# This modules provides API for RequestStore, that is similar to ActiveSupport::PerThreadRegistry API
+# This modules provides API for RequestStore, in conjunction with the ActiveSupport::PerThreadRegistry API
 #
 # Instead of polluting the thread locals namespace:
 #
@@ -36,22 +37,13 @@ require "request_store"
 #
 # If the class has an initializer, it must accept no arguments.
 module RequestStoreRegistry
+  include ActiveSupport::PerThreadRegistry
+
   def self.extended(object)
-    object.instance_variable_set '@request_store_registry_key', object.name.freeze
+    ActiveSupport::PerThreadRegistry.extended(object)
   end
 
   def instance
-    RequestStore.store[@request_store_registry_key] ||= new
-  end
-
-  protected
-
-  def method_missing(name, *args, &block) # :nodoc:
-    # Caches the method definition as a singleton method of the receiver.
-    define_singleton_method(name) do |*a, &b|
-      instance.public_send(name, *a, &b)
-    end
-
-    send(name, *args, &block)
+    RequestStore.store[@per_thread_registry_key] ||= new
   end
 end

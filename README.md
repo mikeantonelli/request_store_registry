@@ -2,7 +2,7 @@
 
 If you need a global state for a request in Rails, [request_store](https://github.com/steveklabnik/request_store) by Steve Klabnik is a great solution.
 
-This gem provides API for `RequestStore`, that is similar to [ActiveSupport::PerThreadRegistry](http://api.rubyonrails.org/classes/ActiveSupport/PerThreadRegistry.html) API.
+This gem provides API for `RequestStore`, in conjunction with the [ActiveSupport::PerThreadRegistry](http://api.rubyonrails.org/classes/ActiveSupport/PerThreadRegistry.html) API.
 
 ## Usage
 
